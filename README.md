@@ -1,2 +1,2 @@
-# aisthack
-AIST Hackathon
+# AIST Hackathon
+More information: http://aisthack.ru/
