@@ -1,9 +1,7 @@
 
 
-
 #' 
-#' BTC/USD prediction using
-#' Keras (Tensorflow backend) and GPU
+#' BTC/USD prediction
 #' 
 
 
@@ -11,7 +9,7 @@
 suppressPackageStartupMessages({
   # DL framework
   library(keras)
-  # if nessary: install_keras(tensorflow = "gpu")
+  #install_keras(tensorflow = "gpu")
   # data processing 
   library(dplyr)
   library(tidyr)
@@ -19,8 +17,8 @@ suppressPackageStartupMessages({
   # vizualize
   library(ggplot2)
 })
-source("LSTM/crypto_funs.R")
-source("LSTM/prediction_funs.R")
+source("source/tickets_analysis/crypto_funs.R")
+source("source/tickets_analysis/prediction_funs.R")
 
 
 
@@ -31,7 +29,12 @@ predictingPeriod <- timeStemps * 30 # 2 months
 
 
 ### 2. Load and preprocessing data ----
-data <- loadTrades("BTCUSD", .from = Sys.time() - years(3), .to = Sys.time(), .period = to.hourly) # readRDS("data/trades.rds")
+data <- loadTrades("BTCUSD", 
+                   .from = Sys.time() - years(3), 
+                   .to = Sys.time(), 
+                   .period = to.hourly)
+
+saveRDS(data, "source/temp/btcusd.rds")
 
 ts.plot(data$Close)
 ts.plot(data$LogReturn)
@@ -77,7 +80,7 @@ model <- keras_model_sequential() %>%
     return_sequences = T
   ) %>% 
   layer_lstm(
-    units = inputShape[1] * 2,
+    units = inputShape[1] ,   
     dropout = .2, recurrent_dropout = .2, 
     return_sequences = F
   ) %>% 
@@ -145,25 +148,6 @@ View(
       TotalLoss = sum(abs(Residuals))
     ) %>% 
     arrange(TotalLoss)
-)
-
-
-### 8. Human vs AI competition ----
-View(
-  data.frame(
-    Close = c(tail(results, 12)[1:10, ]$Close, rep("?", 2))
-  )
-)
-
-View(
-  data.frame(
-    Close = tail(results, 12)$Close,
-    Predict = tail(results, 12)$Predict
-  ) %>% 
-    mutate(
-      PriceChangeOn = floor(c(NA_real_,  diff(Close))),
-      NN_Prediction = floor(Close - Predict)
-    ) 
 )
 
 

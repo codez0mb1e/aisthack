@@ -21,8 +21,6 @@ tickers.raw <- fread("data/train/tickers_train.csv",
 glimpse(tickers.raw)
 anyNA(tickers.raw)
 
-View(tickers.raw %>% filter(is.na(volume)))
-
 
 
 ### 2. Preprocessing data
