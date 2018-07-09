@@ -7,6 +7,8 @@ library(ggplot2)
 library(corrplot)
 
 
+### Vizualize trades ----
+
 to1dCandles <- function(ts, token) {
   require(data.table)
   require(dplyr)
@@ -74,7 +76,8 @@ ggplot(trades %>% filter(Date > Sys.Date() - month(8) & Token != "BTC"), aes(x =
   geom_line(aes(y = log(token_in_BTC), color = Token))
 
 
-### ----
+
+### Oultliers visualization ----
 
 prob <- quantile(token.1d$LogReturn, probs = c(.05, .95))
 
@@ -102,29 +105,12 @@ onchainFields <- c("Volume", "N", "LogReturn", "Total", "N_from_min", "N_from_me
                    "Volume_to_max")
 
 token.m <- as.matrix(token.1d %>% 
-                       #filter(Outlier) %>% 
+                       filter(Outlier) %>% 
                        select(Target, one_of(onchainFields))
                      )
 m <- cor(token.m) %>% replace_na(., 0)
-
-
-x <- m # all
-y <- m # outliers
 
 corrplot.mixed(m, upper = "square", tl.col = "black", number.cex = .7, order = "hclust")
 summary(lm(Target ~ ., token.1d %>% filter(!Outlier) %>% select(-Time)))
 
 
-z <- cbind(x[1,], y[1,]) %>%
-  as.data.frame %>% 
-  transmute(
-    Names = dimnames(x)[[1]],
-    AllTrades = V1,
-    OutlierTrades = V2,
-    Diff = abs(V1 - V2)
-  ) %>% 
-  arrange(
-    -Diff
-  )
-
-View(z)

@@ -15,7 +15,6 @@ library(tidyr)
 
 
 
-
 ### 1. Load dataset ----
 news.raw <- fread("data/train/news_train.csv", 
                   header = T, 

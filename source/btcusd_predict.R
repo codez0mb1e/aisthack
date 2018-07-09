@@ -1,7 +1,7 @@
 
 
 #' 
-#' BTC/USD prediction
+#' BTC/USD price prediction model
 #' 
 
 
@@ -59,8 +59,8 @@ params <- getHyperparams(.size = 72L,
                         .num_leaves = c(31, 48),
                         .min_data_in_leaf = 20L, 
                         .min_sum_hessian_in_leaf = 1e-3,
-                        .feature_fraction = 1, # c(.7, .8, .9),
-                        .bagging_fraction = 1, # c(.75, .85, .95),
+                        .feature_fraction = c(.7, .8, .9),
+                        .bagging_fraction = c(.75, .85, .95),
                         .bagging_freq = 0,
                         .lambda_l1 = c(.01, .02, .04),
                         .lambda_l2 = c(.01, .02),

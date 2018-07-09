@@ -1,5 +1,10 @@
 
 
+#'
+#' Bitcoin trades functions
+#'
+
+
 #' Load Bitcoin/Currency pair trades
 #'
 #' @param market Market

@@ -1,7 +1,7 @@
 
 
 #' 
-#' Tokens prediction
+#' Tokens price prediction
 #' 
 
 
@@ -28,20 +28,6 @@ source("prediction_funs.R")
 ### 1. Load and preprocessing data ----
 source("load_datasets.R")
 
-drgnusd.tickers <- tickers %>% 
-  filter(ticker == "DRGN") %>% 
-  transmute(
-    Token = ticker,
-    Volume = volume,
-    Target = priceBtc,
-    Time = datetime,
-    Date = Time
-  ) %>% 
-  inner_join(
-    onChainStats %>% rename(Total = Volume), by = c("Token", "Date")
-  ) %>% 
-  select(-Token, -Date)
-  
 zrx.tickers <- tickers %>% 
   filter(ticker == "ZRX") %>% 
   transmute(
@@ -104,8 +90,8 @@ params <- getHyperparams(.size = 72L,
                          .num_leaves = c(24, 31, 48),
                          .min_data_in_leaf = 20L, 
                          .min_sum_hessian_in_leaf = 1e-3,
-                         .feature_fraction = 1, # c(.7, .8, .9),
-                         .bagging_fraction = 1, # c(.75, .85, .95),
+                         .feature_fraction = 1,
+                         .bagging_fraction = 1,
                          .bagging_freq = 0,
                          .lambda_l1 = c(.01, .02, .04),
                          .lambda_l2 = c(.01, .02),

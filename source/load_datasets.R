@@ -1,6 +1,6 @@
 
 
-### ----
+### Load tokens trades ----
 library(lubridate)
 
 from <- Sys.time() - years(1)
@@ -16,7 +16,8 @@ usdtusd.1d <- cryptocurrency.loadMarketStatsByCoin("USDT", from, to)
 btgusd.1d <- cryptocurrency.loadMarketStatsByCoin("BTG", from, to)
 
 
-### ----
+
+### Load tickers ----
 
 loadTickers <- function() {
   library(dplyr)
@@ -24,7 +25,7 @@ loadTickers <- function() {
   library(lubridate)
   
   
-  tickers.raw <- fread("~/apps/aisthack/data/train/tickers_train.csv", 
+  tickers.raw <- fread("data/train/tickers_train.csv", 
                        header = T, 
                        sep = ",", 
                        quote = "\"",
@@ -56,7 +57,7 @@ tickers <- loadTickers()
 
 
 
-### ----
+### Load chain data and calc chain stats ----
 
 readOnChain <- function(tokens) {
   require(readr)
@@ -146,8 +147,9 @@ onChainStats <- readOnChain(c("DRGN", "ZRX")) %>% calcChainStats
 
 
 
-###
+### Load news data ----
 library(readr)
+
 zrx_media <- read_csv("data/train/news/ZRX.csv", 
                       col_types = cols(X1 = col_skip())) %>% 
   mutate(
@@ -156,8 +158,5 @@ zrx_media <- read_csv("data/train/news/ZRX.csv",
   select(
     -DateTime
   )
-
-
-
 
 

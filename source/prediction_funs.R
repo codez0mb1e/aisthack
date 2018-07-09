@@ -1,6 +1,10 @@
 
 
 #' 
+#' Model train and predictions functions
+#' 
+
+
 #'
 #' @param .period 
 #' @param dt 
